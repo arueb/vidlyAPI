@@ -1,22 +1,28 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const moment = require('moment');
 
-const Rental = mongoose.model('Rental', new mongoose.Schema({
+const rentalSchema = new mongoose.Schema({
     customer: {
-        type: String,
-        required: true,
-        minLength: 5,
-        maxLength: 50
-    },
-    isGold: {
-        type: Boolean,
-        default: false
-    },
-    phone: {
-        type: String,
-        required: true,
-        minLength: 5,
-        maxLength: 50
+        type: new mongoose.Schema({
+            name: {
+                type: String, 
+                required: true,
+                minLength: 5,
+                maxLength: 50
+            },
+            isGold: {
+                type: Boolean,
+                default: false
+            },
+            phone: {
+                type: String,
+                required: true,
+                minLength: 5,
+                maxLength: 50
+            }
+        }),
+        required: true
     },
     movie: {
         type: new mongoose.Schema({
@@ -48,7 +54,28 @@ const Rental = mongoose.model('Rental', new mongoose.Schema({
         type: Number,
         min: 0
     }
-}));
+});
+
+rentalSchema.statics.lookup = function(customerId, movieId){
+    return this.findOne({
+        'movie._id': movieId, 
+        'customer._id': customerId 
+      });
+}
+
+rentalSchema.methods.return = function() {
+    this.dateReturned = new Date();
+    // calculate rental fee using vanilla javascript:
+    // rental.rentalFee = Math.floor(
+    // (rental.dateReturned - rental.dateOut) / (1000 * 60 * 60 * 24))  * rental.movie.dailyRentalRate;
+    // await rental.save();
+
+    // calculate rental fee using moment.js:
+    const rentalDays = moment().diff(this.dateOut, 'days'); 
+    this.rentalFee =  rentalDays * this.movie.dailyRentalRate;
+}
+
+const Rental = mongoose.model('Rental', rentalSchema);
 
 function validateRental(rental){
     const schema = {

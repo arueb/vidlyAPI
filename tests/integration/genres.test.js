@@ -8,10 +8,10 @@ let server;
 describe('/api/genres', () => {
     beforeEach(() => { 
         server = require('../../index'); 
-    })
+    });
     afterEach( async () => { 
         await Genre.remove({}); //removes all documents in Genres collection
-        server.close();
+        await server.close();
     });
 
     describe('GET /', () => {
@@ -59,8 +59,8 @@ describe('/api/genres', () => {
         let token;
         let name;
 
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .post('/api/genres')
                 .set('x-auth-token', token)
                 .send({ name});
@@ -174,8 +174,8 @@ describe('/api/genres', () => {
         let id;
         let genere;
     
-        const exec = async () => {
-            return await request(server)
+        const exec = () => {
+            return request(server)
                 .delete('/api/genres/' + id)
                 .set('x-auth-token', token)
                 .send();

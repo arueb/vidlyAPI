@@ -14,7 +14,7 @@ require('./startup/routes')(app);
 require('./startup/db')();
 require('./startup/config')();
 require('./startup/validation')();
-
+require('./startup/prod')(app);
 
 // process.on('unhandledRejection', (ex) => {
 //     throw ex; // winston will catch this as unhandled exception
@@ -56,19 +56,16 @@ require('./startup/validation')();
 // app.set('view engine', 'pug');
 // app.set('views', './views'); //default
 
-
 // middleware
 // app.use(express.urlencoded({ extended: true }));  // use if parsing urlEncoded forms to post data 
 // app.use(express.static('public'));
 // app.use(helmet());
 // app.use(logger);
 
-
 // configuration (do not save passwords in config files -> use env variables)
 // console.log(`Application Name: ${config.get('name')}`);
 // console.log(`Mail Server: ${config.get('mail.host')}`);
 // console.log(`Mail Password: ${config.get('mail.password')}`);
-
 
 const port = process.env.port || 3000; 
 
