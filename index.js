@@ -67,7 +67,8 @@ require('./startup/prod')(app);
 // console.log(`Mail Server: ${config.get('mail.host')}`);
 // console.log(`Mail Password: ${config.get('mail.password')}`);
 
-const port = process.env.port || 3000; 
+// const port = process.env.PORT || 3000; 
+const port = process.env.PORT; 
 
 console.log(process.env.NODE_ENV);
 const server = app.listen(port, () => winston.info(`Listening on port ${port} ...`));
