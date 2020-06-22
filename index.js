@@ -1,20 +1,30 @@
-
-const winston = require('winston');
-const express = require('express');
+const winston = require("winston");
+const express = require("express");
 const app = express();
 // const startupDebugger = require('debug')('app:startup');
 // const dbDebugger = require('debug')('app:db');
 
 // const morgan = require('morgan');
 // const helmet = require('helmet');
-// const logger = require('./logger')
+// const headers = require("./middleware/headers");
 
-require('./startup/logging')();
-require('./startup/routes')(app);
-require('./startup/db')();
-require('./startup/config')();
-require('./startup/validation')();
-require('./startup/prod')(app);
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, x-auth-token, X-Auth-Token"
+//   );
+//   next();
+// });
+// app.use(headers);
+
+require("./startup/logging")();
+require("./startup/routes")(app);
+require("./startup/db")();
+require("./startup/config")();
+require("./startup/validation")();
+require("./startup/prod")(app);
 
 // process.on('unhandledRejection', (ex) => {
 //     throw ex; // winston will catch this as unhandled exception
@@ -23,23 +33,22 @@ require('./startup/prod')(app);
 // process.on('uncaughtException', (ex) => {
 //     console.log('WE GOT AN UNCAUGHT EXCEPTION!');
 //     process.exit(1);
-//     logger.error(ex.message, ex); 
+//     logger.error(ex.message, ex);
 // });
 
-// // use winston to write code above 
+// // use winston to write code above
 // logger.exceptions.handle(
 //     new transports.File({ filename: 'exceptions.log' })
 //   );
 
 // throw new Error('Something failed during startup!');
 
-
 // two ways to get the environment variable
 // console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 // console.log(`app: ${app.get('env')}`)
 
-// set environment in terminal using: 
-// export NODE_ENV=production (production can be anything)  
+// set environment in terminal using:
+// export NODE_ENV=production (production can be anything)
 // export NODE_ENV=development
 
 // to turn on Debugger env variable in terminal: export DEBUG=app:startup
@@ -57,7 +66,7 @@ require('./startup/prod')(app);
 // app.set('views', './views'); //default
 
 // middleware
-// app.use(express.urlencoded({ extended: true }));  // use if parsing urlEncoded forms to post data 
+// app.use(express.urlencoded({ extended: true }));  // use if parsing urlEncoded forms to post data
 // app.use(express.static('public'));
 // app.use(helmet());
 // app.use(logger);
@@ -67,11 +76,11 @@ require('./startup/prod')(app);
 // console.log(`Mail Server: ${config.get('mail.host')}`);
 // console.log(`Mail Password: ${config.get('mail.password')}`);
 
-// const port = process.env.PORT || 3000; 
-const port = process.env.PORT; 
+const port = process.env.PORT || 3900;
+// const port = process.env.PORT;
 
 console.log(process.env.NODE_ENV);
-const server = app.listen(port, () => winston.info(`Listening on port ${port} ...`));
+const server = app.listen(port, () =>
+  winston.info(`Listening on port ${port} ...`)
+);
 module.exports = server;
-
-
